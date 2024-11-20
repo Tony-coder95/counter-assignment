@@ -36,14 +36,23 @@ test('clicking - decrements the count', () => {
   expect(countElement.textContent).toBe('-2');
 });
 
-test('increment and decrement work together', () => {
+test('increments multiple times correctly', () => {
   const countElement = screen.getByTestId('count');
   const incrementButton = screen.getByText('+');
+
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+
+  expect(countElement.textContent).toBe('3'); // 0 + 1 + 1 + 1 = 3
+});
+
+test('decrements multiple times correctly', () => {
+  const countElement = screen.getByTestId('count');
   const decrementButton = screen.getByText('-');
 
-  fireEvent.click(incrementButton);
-  fireEvent.click(incrementButton);
+  fireEvent.click(decrementButton);
   fireEvent.click(decrementButton);
 
-  expect(countElement.textContent).toBe('1'); // 0 + 1 + 1 - 1 = 1
+  expect(countElement.textContent).toBe('-2'); // 0 - 1 - 1 = -2
 });
