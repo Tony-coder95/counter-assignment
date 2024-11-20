@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Counter, { increment, decrement } from '../components/Counter';
+import Counter from '../components/Counter';
 
 beforeEach(() => {
   render(<Counter />);
@@ -14,36 +14,42 @@ test('should render initial count with value of 0', () => {
   expect(screen.getByTestId('count').textContent).toBe('0');
 });
 
-test('calls increment function directly', () => {
-  let count = 0; // Simulated state
-  count = increment(count);
-  expect(count).toBe(1);
+test('renders increment and decrement buttons', () => {
+  expect(screen.getByText('+')).toBeInTheDocument();
+  expect(screen.getByText('-')).toBeInTheDocument();
 });
 
-test('calls decrement function directly', () => {
-  let count = 0; // Simulated state
-  count = decrement(count);
-  expect(count).toBe(-1);
-});
-
-test('clicking + increments the count', () => {
+test('clicking + increments the count multiple times', () => {
   const countElement = screen.getByTestId('count');
   const incrementButton = screen.getByText('+');
 
-  fireEvent.click(incrementButton); // First click
-  expect(countElement.textContent).toBe('1');
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
 
-  fireEvent.click(incrementButton); // Second click
-  expect(countElement.textContent).toBe('2');
+  expect(countElement.textContent).toBe('3');
 });
 
-test('clicking - decrements the count', () => {
+test('clicking - decrements the count multiple times', () => {
   const countElement = screen.getByTestId('count');
   const decrementButton = screen.getByText('-');
 
-  fireEvent.click(decrementButton); // First click
-  expect(countElement.textContent).toBe('-1');
+  fireEvent.click(decrementButton);
+  fireEvent.click(decrementButton);
 
-  fireEvent.click(decrementButton); // Second click
   expect(countElement.textContent).toBe('-2');
+});
+
+test('combination of + and - buttons works correctly', () => {
+  const countElement = screen.getByTestId('count');
+  const incrementButton = screen.getByText('+');
+  const decrementButton = screen.getByText('-');
+
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+  fireEvent.click(decrementButton);
+  fireEvent.click(decrementButton);
+  fireEvent.click(decrementButton); // Extra decrement
+
+  expect(countElement.textContent).toBe('-1'); // 0 + 1 + 1 - 1 - 1 - 1 = -1
 });
