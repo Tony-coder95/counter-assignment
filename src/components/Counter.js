@@ -4,12 +4,10 @@ export default function Counter() {
   const [count, setCount] = useState(0);
 
 function increment() {
-  console.log('Increment function called');
   setCount((prevCount) => prevCount + 1);
 }
 
 function decrement() {
-  console.log('Decrement function called');
   setCount((prevCount) => prevCount - 1);
 }
 
