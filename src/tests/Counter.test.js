@@ -15,14 +15,35 @@ test('should render initial count with value of 0', () => {
 });
 
 test('clicking + increments the count', () => {
+  const countElement = screen.getByTestId('count');
   const incrementButton = screen.getByText('+');
-  fireEvent.click(incrementButton);
-  expect(screen.getByTestId('count').textContent).toBe('1');
+
+  fireEvent.click(incrementButton); // First click
+  expect(countElement.textContent).toBe('1');
+
+  fireEvent.click(incrementButton); // Second click
+  expect(countElement.textContent).toBe('2');
 });
 
 test('clicking - decrements the count', () => {
+  const countElement = screen.getByTestId('count');
   const decrementButton = screen.getByText('-');
-  fireEvent.click(decrementButton);
-  expect(screen.getByTestId('count').textContent).toBe('-1');
+
+  fireEvent.click(decrementButton); // First click
+  expect(countElement.textContent).toBe('-1');
+
+  fireEvent.click(decrementButton); // Second click
+  expect(countElement.textContent).toBe('-2');
 });
 
+test('increment and decrement work together', () => {
+  const countElement = screen.getByTestId('count');
+  const incrementButton = screen.getByText('+');
+  const decrementButton = screen.getByText('-');
+
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+  fireEvent.click(decrementButton);
+
+  expect(countElement.textContent).toBe('1'); // 0 + 1 + 1 - 1 = 1
+});
