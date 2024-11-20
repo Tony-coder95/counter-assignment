@@ -20,6 +20,3 @@ export default function Counter() {
     </div>
   );
 }
-
-// Export functions for testing purposes
-export { increment, decrement };
