@@ -14,6 +14,11 @@ test('should render initial count with value of 0', () => {
   expect(screen.getByTestId('count').textContent).toBe('0');
 });
 
+test('renders increment and decrement buttons', () => {
+  expect(screen.getByText('+')).toBeInTheDocument();
+  expect(screen.getByText('-')).toBeInTheDocument();
+});
+
 test('clicking + increments the count', () => {
   const countElement = screen.getByTestId('count');
   const incrementButton = screen.getByText('+');
@@ -55,4 +60,17 @@ test('decrements multiple times correctly', () => {
   fireEvent.click(decrementButton);
 
   expect(countElement.textContent).toBe('-2'); // 0 - 1 - 1 = -2
+});
+
+test('count does not break on multiple operations', () => {
+  const countElement = screen.getByTestId('count');
+  const incrementButton = screen.getByText('+');
+  const decrementButton = screen.getByText('-');
+
+  fireEvent.click(incrementButton);
+  fireEvent.click(incrementButton);
+  fireEvent.click(decrementButton);
+  fireEvent.click(decrementButton);
+  fireEvent.click(decrementButton); // Extra decrement
+  expect(countElement.textContent).toBe('-1');
 });
