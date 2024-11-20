@@ -14,11 +14,12 @@ export default function Counter() {
   return (
     <div>
       <h2>Counter</h2>
-      {/* Display the current count */}
       <p data-testid="count">{count}</p>
-      {/* Buttons to increment and decrement */}
       <button onClick={increment}> + </button>
       <button onClick={decrement}> - </button>
     </div>
   );
 }
+
+// Export functions for testing purposes
+export { increment, decrement };
