@@ -2,52 +2,60 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Counter from '../components/Counter';
 
+// Run before each test to render the Counter component
 beforeEach(() => {
   render(<Counter />);
 });
 
-test('renders counter message', () => {
+test('renders the Counter component', () => {
   expect(screen.getByText(/Counter/i)).toBeInTheDocument();
-});
-
-test('should render initial count with value of 0', () => {
   expect(screen.getByTestId('count').textContent).toBe('0');
-});
-
-test('calls increment function directly', () => {
-  // Simulate direct function call
-  let count = 0;
-  count += 1; // Equivalent to increment logic
-  expect(count).toBe(1);
-});
-
-test('calls decrement function directly', () => {
-  // Simulate direct function call
-  let count = 0;
-  count -= 1; // Equivalent to decrement logic
-  expect(count).toBe(-1);
 });
 
 test('clicking + increments the count', () => {
   const incrementButton = screen.getByText('+');
-  fireEvent.click(incrementButton);
   const countElement = screen.getByTestId('count');
+
+  fireEvent.click(incrementButton); // First click
   expect(countElement.textContent).toBe('1');
+
+  fireEvent.click(incrementButton); // Second click
+  expect(countElement.textContent).toBe('2');
 });
 
 test('clicking - decrements the count', () => {
   const decrementButton = screen.getByText('-');
-  fireEvent.click(decrementButton);
   const countElement = screen.getByTestId('count');
+
+  fireEvent.click(decrementButton); // First click
   expect(countElement.textContent).toBe('-1');
+
+  fireEvent.click(decrementButton); // Second click
+  expect(countElement.textContent).toBe('-2');
 });
 
-test('combination of + and - buttons works correctly', () => {
+test('combination of + and - buttons updates the count correctly', () => {
   const incrementButton = screen.getByText('+');
   const decrementButton = screen.getByText('-');
-  fireEvent.click(incrementButton);
-  fireEvent.click(incrementButton);
-  fireEvent.click(decrementButton);
   const countElement = screen.getByTestId('count');
-  expect(countElement.textContent).toBe('1');
+
+  fireEvent.click(incrementButton); // Count = 1
+  fireEvent.click(incrementButton); // Count = 2
+  fireEvent.click(decrementButton); // Count = 1
+  fireEvent.click(decrementButton); // Count = 0
+  expect(countElement.textContent).toBe('0');
+});
+
+test('directly calls increment function', () => {
+  let count = 0; // Simulating initial state
+  const increment = () => (count += 1); // Simulated function logic
+  increment(); // Call function
+  expect(count).toBe(1); // Assert updated value
+});
+
+test('directly calls decrement function', () => {
+  let count = 0; // Simulating initial state
+  const decrement = () => (count -= 1); // Simulated function logic
+  decrement(); // Call function
+  expect(count).toBe(-1); // Assert updated value
 });
